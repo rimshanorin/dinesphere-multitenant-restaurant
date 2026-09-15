@@ -17,6 +17,9 @@ class Tenant extends BaseTenant implements TenantWithDatabase
             'id',
             'name',
             'slug',
+             'owner_name',
+            'owner_email',
+            'cuisine_type',
         ];
     }
 }

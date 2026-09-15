@@ -108,7 +108,7 @@ const restaurants = [
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Ready to launch your restaurant online?</h2>
         <p class="text-orange-50 text-lg mb-8">Join DineSphere today and get your own branded ordering site — no coding required.</p>
-        <Link href="/register" class="inline-block px-8 py-3.5 rounded-full bg-white text-orange-600 font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
+        <Link href="/register-restaurant" class="inline-block px-8 py-3.5 rounded-full bg-white text-orange-600 font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
           Get Started for Free
         </Link>
       </div>

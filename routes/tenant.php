@@ -21,7 +21,7 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-    // Tenant-specific routes will go here once we create tenants.
-    // Example (added later):
-    // Route::get('/', [TenantHomeController::class, 'index']);
+  Route::get('/', function () {
+        return 'Welcome to ' . tenant('name') . '! Tenant ID: ' . tenant('id');
+    });
 });

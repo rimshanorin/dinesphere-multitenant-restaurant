@@ -1,6 +1,10 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
+
+const page = usePage()
+const successMessage = computed(() => page.props.flash?.success)
 
 const features = [
   { icon: '🏪', title: 'Multi-Restaurant Platform', desc: 'Each restaurant gets its own branded storefront with a custom domain or subdomain.' },
@@ -18,6 +22,12 @@ const restaurants = [
 
 <template>
   <AppLayout>
+     <div
+      v-if="successMessage"
+      class="bg-green-50 border-b border-green-200 text-green-800 px-4 py-3 text-center text-sm font-medium"
+    >
+      {{ successMessage }}
+    </div>
     <section class="relative pb-24 overflow-hidden bg-gradient-to-b from-orange-50 via-white to-white">
       <div class="absolute -top-24 -right-24 w-96 h-96 bg-orange-200 rounded-full mix-blend-multiply blur-3xl opacity-40"></div>
       <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-yellow-200 rounded-full mix-blend-multiply blur-3xl opacity-40"></div>

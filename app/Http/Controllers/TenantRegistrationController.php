@@ -46,7 +46,7 @@ class TenantRegistrationController extends Controller
             'domain' => $validated['subdomain'] . '.localhost',
         ]);
 
-        return redirect()->route('home')->with(
+        return redirect('/')->with(
             'success',
             "Your restaurant site is ready! Visit http://{$validated['subdomain']}.localhost:8000"
         );

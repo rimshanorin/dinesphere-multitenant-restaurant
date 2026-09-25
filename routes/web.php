@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RestaurantDirectoryController;
 use App\Http\Controllers\TenantRegistrationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,3 +18,14 @@ Route::get('/register-restaurant', [TenantRegistrationController::class, 'create
 
 Route::post('/register-restaurant', [TenantRegistrationController::class, 'store'])
     ->name('tenant.register.store');
+
+Route::get('/restaurants', [RestaurantDirectoryController::class, 'index'])
+    ->name('restaurants.index');
+
+Route::get('/about', function () {
+    return Inertia::render('About');
+})->name('about');
+
+Route::get('/contact', function () {
+    return Inertia::render('Contact');
+})->name('contact');

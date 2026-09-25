@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { Link, usePage } from '@inertiajs/vue3'
 
 const props = defineProps({
   restaurantName: String,
@@ -8,6 +9,9 @@ const props = defineProps({
     default: () => [],
   },
 })
+
+const page = usePage()
+const user = computed(() => page.props.auth?.user)
 
 const activeCategory = ref('All')
 
@@ -97,9 +101,15 @@ const categoryEmoji = {
       </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm mt-10">
-      <p>© {{ new Date().getFullYear() }} {{ restaurantName }} — Powered by DineSphere</p>
-    </footer>
+  <!-- Footer -->
+<footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm mt-10">
+  <p>© {{ new Date().getFullYear() }} {{ restaurantName }} — Powered by DineSphere</p>
+  <Link
+    :href="user ? '/dashboard' : '/login'"
+    class="inline-block mt-3 text-xs text-gray-500 hover:text-orange-400 transition-colors duration-200"
+  >
+    {{ user ? '→ Go to Dashboard' : 'Staff Login' }}
+  </Link>
+</footer>
   </div>
 </template>

@@ -12,7 +12,6 @@ window.addEventListener('scroll', () => {
 const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'Restaurants', href: '/restaurants' },
-  { name: 'Menu', href: '/menu' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
 ]
@@ -46,16 +45,13 @@ const navLinks = [
         </div>
 
         <div class="hidden md:flex items-center gap-3">
-          <Link href="/login" class="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-orange-600 transition-colors duration-200">
-            Log in
-          </Link>
-          <Link
-            href="/register"
-            class="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 rounded-full shadow-md hover:shadow-orange-300/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-          >
-            Get Started
-          </Link>
-        </div>
+  <Link
+    href="/register-restaurant"
+    class="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 rounded-full shadow-md hover:shadow-orange-300/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+  >
+    List Your Restaurant
+  </Link>
+</div>
 
         <button
           @click="mobileOpen = !mobileOpen"
@@ -89,17 +85,14 @@ const navLinks = [
         >
           {{ link.name }}
         </Link>
-        <hr class="my-2 border-gray-100" />
-        <Link href="/login" class="block px-3 py-2.5 rounded-lg text-gray-700 hover:bg-orange-50 font-medium" @click="mobileOpen = false">
-          Log in
-        </Link>
-        <Link
-          href="/register"
-          class="block text-center px-3 py-2.5 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold"
-          @click="mobileOpen = false"
-        >
-          Get Started
-        </Link>
+       <hr class="my-2 border-gray-100" />
+<Link
+  href="/register-restaurant"
+  class="block text-center px-3 py-2.5 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold"
+  @click="mobileOpen = false"
+>
+  List Your Restaurant
+</Link>
       </div>
     </transition>
   </nav>

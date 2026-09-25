@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useForm, usePage, router } from '@inertiajs/vue3'
+import { useForm, usePage, router,Link } from '@inertiajs/vue3'
 
 const props = defineProps({
   menuItems: Array,
@@ -8,7 +8,13 @@ const props = defineProps({
 
 const page = usePage()
 const successMessage = computed(() => page.props.flash?.success)
+// updated later
+const user = computed(() => page.props.auth?.user)
 
+const logout = () => {
+  router.post('/logout')
+}
+//end of updation
 const showModal = ref(false)
 const editingItem = ref(null)
 
@@ -20,7 +26,18 @@ const form = useForm({
   price: '',
   category: 'Main Course',
   is_available: true,
+  image: null,
 })
+
+const imagePreview = ref(null)
+
+const handleImageChange = (event) => {
+  const file = event.target.files[0]
+  form.image = file
+  if (file) {
+    imagePreview.value = URL.createObjectURL(file)
+  }
+}
 
 const openAddModal = () => {
   editingItem.value = null
@@ -36,6 +53,7 @@ const openEditModal = (item) => {
   form.price = item.price
   form.category = item.category
   form.is_available = item.is_available
+  form.image = null
   form.clearErrors()
   showModal.value = true
 }
@@ -43,16 +61,20 @@ const openEditModal = (item) => {
 const closeModal = () => {
   showModal.value = false
   editingItem.value = null
+  imagePreview.value = null
   form.reset()
 }
 
 const submit = () => {
   if (editingItem.value) {
-    form.put(`/dashboard/menu-items/${editingItem.value.id}`, {
+    form.post(`/dashboard/menu-items/${editingItem.value.id}`, {
+      forceFormData: true,
       onSuccess: () => closeModal(),
+      onBefore: () => form.transform((data) => ({ ...data, _method: 'put' })),
     })
   } else {
     form.post('/dashboard/menu-items', {
+      forceFormData: true,
       onSuccess: () => closeModal(),
     })
   }
@@ -71,20 +93,36 @@ const formatPrice = (price) => `$${parseFloat(price).toFixed(2)}`
   <div class="min-h-screen bg-gray-50">
 
     <!-- Header -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
-        <div>
-          <h1 class="text-xl font-bold text-gray-900">Restaurant Dashboard</h1>
-          <p class="text-sm text-gray-500">Manage your menu items</p>
-        </div>
-        <button
-          @click="openAddModal"
-          class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-        >
-          + Add Menu Item
-        </button>
-      </div>
-    </header>
+ <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-bold text-gray-900">Restaurant Dashboard</h1>
+      <p class="text-sm text-gray-500">
+        Manage your menu items <span v-if="user">— logged in as {{ user.name }}</span>
+      </p>
+    </div>
+    <div class="flex items-center gap-3">
+      <Link
+        href="/"
+        class="px-4 py-2.5 rounded-lg border border-gray-300 text-gray-600 font-medium hover:bg-gray-50 transition-colors duration-200"
+      >
+        View Storefront
+      </Link>
+      <button
+        @click="openAddModal"
+        class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+      >
+        + Add Menu Item
+      </button>
+      <button
+        @click="logout"
+        class="px-4 py-2.5 rounded-lg border border-gray-300 text-gray-600 font-medium hover:bg-gray-50 transition-colors duration-200"
+      >
+        Log out
+      </button>
+    </div>
+  </div>
+</header>
 
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -219,6 +257,22 @@ const formatPrice = (price) => `$${parseFloat(price).toFixed(2)}`
                 </select>
               </div>
             </div>
+            <div>
+  <label class="block text-sm font-semibold text-gray-700 mb-1.5">Dish Photo</label>
+  <input
+    type="file"
+    accept="image/*"
+    @change="handleImageChange"
+    class="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-50 file:text-orange-700 file:font-semibold hover:file:bg-orange-100"
+  />
+  <div v-if="imagePreview" class="mt-2">
+    <img :src="imagePreview" class="w-24 h-24 object-cover rounded-lg border border-gray-200" />
+  </div>
+  <div v-else-if="editingItem?.image_path" class="mt-2">
+    <img :src="`/storage/${editingItem.image_path}`" class="w-24 h-24 object-cover rounded-lg border border-gray-200" />
+  </div>
+  <p v-if="form.errors.image" class="text-sm text-red-600 mt-1">{{ form.errors.image }}</p>
+</div>
 
             <label v-if="editingItem" class="flex items-center gap-2 cursor-pointer">
               <input v-model="form.is_available" type="checkbox" class="w-4 h-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500" />
